@@ -56,9 +56,15 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	// Create test data
 	float tempVertices[] = { 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f };
+	//float tempVertices[] = { 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 1.f, 0.f };
 	glGenBuffers(1, &m_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW);	 
+
+	float tempVertices1[] = { 0.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 1.f, 0.f };
+	glGenBuffers(1, &m_VBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -304,14 +310,25 @@ void Renderer::Test()
 {
 	glUseProgram(m_SolidRectShader);
 
-	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
-	glEnableVertexAttribArray(attribPosition);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	GLint VBOLcation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLcation);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	glVertexAttribPointer(VBOLcation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	GLint VBOLcation1 = glGetAttribLocation(m_SolidRectShader, "a_Position1");
+	glEnableVertexAttribArray(VBOLcation1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glVertexAttribPointer(VBOLcation1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);	// start rendering, primitive (즉시 return한다.)
+	//glDrawArrays(GL_TRIANGLES, 0, 6);	
+
+	glEnableVertexAttribArray(VBOLcation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glVertexAttribPointer(VBOLcation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);	// start rendering, primitive (즉시 return한다.)
 
-	glDisableVertexAttribArray(attribPosition);
+	glDisableVertexAttribArray(VBOLcation);
+	glDisableVertexAttribArray(VBOLcation1);
 }
