@@ -320,14 +320,16 @@ void Renderer::Test()
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
 	glVertexAttribPointer(VBOLcation1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);	// start rendering, primitive (즉시 return한다.)
-	//glDrawArrays(GL_TRIANGLES, 0, 6);	
-
-	glEnableVertexAttribArray(VBOLcation);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
-	glVertexAttribPointer(VBOLcation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	static float gscale = 0.f;
+	GLint ScaleUniform = glGetUniformLocation(m_SolidRectShader, "u_Scale");
+	glUniform1f(ScaleUniform, gscale);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);	// start rendering, primitive (즉시 return한다.)
+
+	gscale += 0.01f;
+
+	if (gscale > 1.f)
+		gscale = 0.f;
 
 	glDisableVertexAttribArray(VBOLcation);
 	glDisableVertexAttribArray(VBOLcation1);
