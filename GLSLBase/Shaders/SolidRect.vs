@@ -9,6 +9,7 @@ in float a_Amp; // float amp 1개
 in float a_RandValue;
 
 uniform float u_Time; // 누적시간
+uniform vec3 u_ExForce;
 
 const vec3 c_Gravity = vec3(0, -2.8, 0);
 const mat3 c_NV = mat3(0, -1, 0, 1, 0, 0, 0, 0, 0);
@@ -38,9 +39,10 @@ void main()
 		newTime = mod(newTime, a_LifeTime);
 		float t = newTime;
 		float tt = newTime * newTime;
-		vec3 currVel = a_Velocity + t * c_Gravity;
+		vec3 newAcc = c_Gravity + u_ExForce;
+		vec3 currVel = a_Velocity + t * newAcc;
 		vec3 normalV = normalize(currVel * c_NV);
-		newPos = newPos + t * a_Velocity + 0.5 * c_Gravity * tt;
+		newPos = newPos + t * a_Velocity + 0.5 * newAcc * tt;
 		newPos = newPos + normalV * a_Amp * sin(newTime * 2 * 3.14 * a_Period);
 	}
 

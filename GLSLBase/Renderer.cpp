@@ -574,6 +574,9 @@ void Renderer::Particle()
 	GLint UniformTime = glGetUniformLocation(shader, "u_Time");
 	glUniform1f(UniformTime, g_Time);
 
+	GLint UniformExForce = glGetUniformLocation(shader, "u_ExForce");
+	glUniform3f(UniformExForce, sin(g_Time), cos(g_Time), 0);
+
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
 	g_Time += 0.016;
