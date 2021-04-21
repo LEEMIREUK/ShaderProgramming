@@ -62,6 +62,11 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW);	 
 
+	float tempVertices1[] = { 0.f, 0.f, 0.f, -1.f, 0.f, 0.f, -1.f, 1.f, 0.f };
+	glGenBuffers(1, &m_VBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW);
+
 	float sizeRect = 0.5f;
 	float tempVertices2[] = {
 		-sizeRect, -sizeRect, 0.f,
@@ -654,14 +659,23 @@ void Renderer::Particle()
 void Renderer::FSSandbox()
 {
 	GLuint shader = m_FSSandboxShader;
-	glUseProgram(shader);	// shader program select
+	glUseProgram(shader); //shader program select
 
-
-	GLint attribPosLoc = glGetAttribLocation(shader, "a_Position");
+	GLuint attribPosLoc = glGetAttribLocation(shader, "a_Position");
 	glEnableVertexAttribArray(attribPosLoc);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBOFSSandBox);
 	glVertexAttribPointer(attribPosLoc, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (GLvoid*)(0));
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	GLuint uniformPointLoc = glGetUniformLocation(shader, "u_Point");
+	glUniform3f(uniformPointLoc, 0.5f, 0.5f, 0.1f);
 
+	float points[] = {
+				-0.5, -0.5, 0.01, -0.4, -0.4, 0.01, -0.3, -0.3, 0.01, -0.2, -0.2, 0.01, -0.1, -0.1, 0.01,
+				0.5, 0.5, 0.01, 0.4, 0.4, 0.01, 0.3, 0.3, 0.01, 0.2, 0.2, 0.01, 0.1, 0.1, 0.01
+	};
+
+	GLuint uniformPointsLoc = glGetUniformLocation(shader, "u_Points");
+	glUniform3fv(uniformPointsLoc, 10, points);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
