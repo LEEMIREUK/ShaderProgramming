@@ -177,6 +177,8 @@
     <None Include="Shaders\FSSandbox.vs" />
     <None Include="Shaders\SolidRect.fs" />
     <None Include="Shaders\SolidRect.vs" />
+    <None Include="Shaders\Texture.fs" />
+    <None Include="Shaders\Texture.vs" />
     <None Include="Shaders\VSGridMeshSandbox.fs" />
     <None Include="Shaders\VSGridMeshSandbox.vs" />
   </ItemGroup>

@@ -17,26 +17,28 @@ public:
 	Renderer(int windowSizeX, int windowSizeY);
 	~Renderer();
 
-	GLuint CreatePngTexture(char * filePath);
-	GLuint CreateBmpTexture(char * filePath);
-	   
+	GLuint CreatePngTexture(char* filePath);
+	GLuint CreateBmpTexture(char* filePath);
+
 	void Test();
 	void Particle();
 	void FSSandbox();
 	void VSGridMeshSandbox();
+	void DrawSimpleTexture();
 
 private:
 	void Initialize(int windowSizeX, int windowSizeY);
-	bool ReadFile(char* filename, std::string *target);
+	bool ReadFile(char* filename, std::string* target);
 	void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType);
 	GLuint CompileShaders(char* filenameVS, char* filenameFS);
-	void CreateVertexBufferObjects(); 
-	unsigned char * Renderer::loadBMPRaw(const char * imagepath, unsigned int& outWidth, unsigned int& outHeight);
+	void CreateVertexBufferObjects();
+	unsigned char* Renderer::loadBMPRaw(const char* imagepath, unsigned int& outWidth, unsigned int& outHeight);
 	void CreateParticle(int count);
 	void CreateGridGeometry();
+	void CreateTextures();
 
 	bool m_Initialized = false;
-	
+
 	unsigned int m_WindowSizeX = 0;
 	unsigned int m_WindowSizeY = 0;
 
@@ -66,4 +68,8 @@ private:
 
 	GLuint m_VBO_GridGeo = 0;
 	GLuint m_Count_GridGeo = 0;
+
+	GLuint m_TextureCheckerBoard = 0;
+	GLuint m_SimpleTextureShader = 0;
+	GLuint m_VBORect_PosTex = 0;
 };

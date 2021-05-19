@@ -47,6 +47,12 @@
     <None Include="Shaders\VSGridMeshSandbox.vs">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shaders\Texture.fs">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Texture.vs">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
