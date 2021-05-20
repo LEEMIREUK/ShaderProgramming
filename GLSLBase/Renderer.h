@@ -70,6 +70,7 @@ private:
 	GLuint m_Count_GridGeo = 0;
 
 	GLuint m_TextureCheckerBoard = 0;
+	GLuint m_TextureRGB = 0;
 	GLuint m_SimpleTextureShader = 0;
 	GLuint m_VBORect_PosTex = 0;
 };

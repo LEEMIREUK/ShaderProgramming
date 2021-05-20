@@ -29,6 +29,11 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	m_FSSandboxShader = CompileShaders("./Shaders/FSSandbox.vs", "./Shaders/FSSandbox.fs");
 	m_VSGridMeshSandboxShader = CompileShaders("./Shaders/VSGridMeshSandbox.vs", "./Shaders/VSGridMeshSandbox.fs");
 	m_SimpleTextureShader = CompileShaders("./Shaders/Texture.vs", "./Shaders/Texture.fs");
+
+	// Load Textures
+	m_TextureRGB = CreatePngTexture("./Texture/RGB.png");
+
+
 	//Create VBOs
 	CreateVertexBufferObjects();
 
@@ -851,6 +856,13 @@ void Renderer::DrawSimpleTexture()
 	glEnableVertexAttribArray(attribTexPosLoc);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect_PosTex);
 	glVertexAttribPointer(attribTexPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (GLvoid*)(sizeof(float) * 3));
+
+	GLuint uniformTex = glGetUniformLocation(shader, "u_TexSampler");
+	glUniform1i(uniformTex, 1);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_TextureRGB);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_TextureCheckerBoard);
 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
