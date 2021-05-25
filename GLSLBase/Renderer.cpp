@@ -858,7 +858,7 @@ void Renderer::DrawSimpleTexture()
 	glVertexAttribPointer(attribTexPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (GLvoid*)(sizeof(float) * 3));
 
 	GLuint uniformTex = glGetUniformLocation(shader, "u_TexSampler");
-	glUniform1i(uniformTex, 1);
+	glUniform1i(uniformTex, 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_TextureRGB);
 	glActiveTexture(GL_TEXTURE1);
