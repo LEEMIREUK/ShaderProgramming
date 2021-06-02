@@ -73,4 +73,12 @@ private:
 	GLuint m_TextureRGB = 0;
 	GLuint m_SimpleTextureShader = 0;
 	GLuint m_VBORect_PosTex = 0;
+
+	GLuint m_TextureID0 = 0;
+	GLuint m_TextureID1 = 0;
+	GLuint m_TextureID2 = 0;
+	GLuint m_TextureID3 = 0;
+	GLuint m_TextureID4 = 0;
+	GLuint m_TextureID5 = 0;
+	GLuint m_TextureIDTotal = 0;
 };
