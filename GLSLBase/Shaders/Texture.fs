@@ -60,5 +60,6 @@ vec4 SpriteTexture()
 void main()
 {
 	//FragColor = texture(u_TexSampler, v_TexPos);
-	FragColor = SpriteTexture();
+	//FragColor = SpriteTexture();
+	FragColor = SingleTexture();
 }

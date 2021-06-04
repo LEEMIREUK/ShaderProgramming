@@ -36,6 +36,7 @@ private:
 	void CreateParticle(int count);
 	void CreateGridGeometry();
 	void CreateTextures();
+	GLuint CreateFBO(int sx, int sy, GLuint* tex, GLuint* depthTex);
 
 	bool m_Initialized = false;
 
@@ -81,4 +82,8 @@ private:
 	GLuint m_TextureID4 = 0;
 	GLuint m_TextureID5 = 0;
 	GLuint m_TextureIDTotal = 0;
+
+	GLuint m_FBO_0 = 0;
+	GLuint m_FBOTexture_0 = 0;
+	GLuint m_FBODepth_0 = 0;
 };

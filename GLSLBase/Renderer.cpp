@@ -106,6 +106,51 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	// Create Textures
 	CreateTextures();
+
+	// Create FBO
+	m_FBO_0 = CreateFBO(512, 512, &m_FBOTexture_0, &m_FBODepth_0);
+}
+
+GLuint Renderer::CreateFBO(int sx, int sy, GLuint* tex, GLuint* depthTex)
+{
+	//Gen render target
+	GLuint tempTex = 0;
+	glGenTextures(1, &tempTex);
+	glBindTexture(GL_TEXTURE_2D, tempTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, sx, sy, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	*tex = tempTex;
+
+	//Gen depth texture
+	GLuint tempDepthTex = 0;
+	glGenTextures(1, &tempDepthTex);
+	glBindTexture(GL_TEXTURE_2D, tempDepthTex);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, sx, sy, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	*depthTex = tempDepthTex;
+
+	GLuint tempFBO;
+	glGenFramebuffers(1, &tempFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, tempFBO);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tempTex, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, tempDepthTex, 0);
+
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "Error while attach fbo. \n";
+		return 0;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return tempFBO;
 }
 
 void Renderer::CreateTextures()
@@ -1013,6 +1058,10 @@ void Renderer::FSSandbox()
 
 void Renderer::VSGridMeshSandbox()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO_0);
+	glViewport(0, 0, 512, 512);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	GLuint shader = m_VSGridMeshSandboxShader;
 	glUseProgram(shader); //shader program select
 
@@ -1028,6 +1077,9 @@ void Renderer::VSGridMeshSandbox()
 	glDrawArrays(GL_LINES, 0, m_Count_GridGeo);
 
 	g_Time += 0.016;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, m_WindowSizeX, m_WindowSizeY);
 }
 
 int gTexIndex = 0;
@@ -1052,7 +1104,8 @@ void Renderer::DrawSimpleTexture()
 	GLuint uniformTex = glGetUniformLocation(shader, "u_TexSampler");
 	glUniform1i(uniformTex, 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_TextureIDTotal);
+	//glBindTexture(GL_TEXTURE_2D, m_TextureIDTotal);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_0);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_TextureID1);
 	glActiveTexture(GL_TEXTURE2);
