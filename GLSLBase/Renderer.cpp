@@ -109,6 +109,12 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	// Create FBO
 	m_FBO_0 = CreateFBO(512, 512, &m_FBOTexture_0, &m_FBODepth_0);
+
+	m_FBO_P = CreateFBO(512, 512, &m_FBOTexture_P, &m_FBODepth_P);
+
+	m_FBO_F = CreateFBO(512, 512, &m_FBOTexture_F, &m_FBODepth_F);
+
+	m_FBO_G = CreateFBO(512, 512, &m_FBOTexture_G, &m_FBODepth_G);
 }
 
 GLuint Renderer::CreateFBO(int sx, int sy, GLuint* tex, GLuint* depthTex)
@@ -961,6 +967,12 @@ float g_Time = 0.f;
 
 void Renderer::Particle()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO_P);
+	glViewport(0, 0, 512, 512);
+	glClearColor(0, 0, 0, 1);
+	glClearDepth(1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	GLuint shader = m_SolidRectShader;
 	glUseProgram(shader);	// shader program select
 
@@ -1013,6 +1025,9 @@ void Renderer::Particle()
 	glDrawArrays(GL_TRIANGLES, 0, m_VBOManyParticleCount);
 
 	g_Time += 0.016;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, m_WindowSizeX, m_WindowSizeY);
 }
 
 float g_points[] = {
@@ -1030,6 +1045,12 @@ float g_points[] = {
 
 void Renderer::FSSandbox()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO_F);
+	glViewport(0, 0, 512, 512);
+	glClearColor(0, 0, 0, 1);
+	glClearDepth(1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	GLuint shader = m_FSSandboxShader;
 	glUseProgram(shader); //shader program select
 
@@ -1054,12 +1075,17 @@ void Renderer::FSSandbox()
 
 	glDisable(GL_BLEND);
 	g_Time += 0.016;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, m_WindowSizeX, m_WindowSizeY);
 }
 
 void Renderer::VSGridMeshSandbox()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO_0);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO_G);
 	glViewport(0, 0, 512, 512);
+	glClearColor(0, 0, 0, 1);
+	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	GLuint shader = m_VSGridMeshSandboxShader;
@@ -1105,7 +1131,8 @@ void Renderer::DrawSimpleTexture()
 	glUniform1i(uniformTex, 0);
 	glActiveTexture(GL_TEXTURE0);
 	//glBindTexture(GL_TEXTURE_2D, m_TextureIDTotal);
-	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_0);
+	//glBindTexture(GL_TEXTURE_2D, m_FBOTexture_0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_P);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_TextureID1);
 	glActiveTexture(GL_TEXTURE2);
@@ -1117,6 +1144,19 @@ void Renderer::DrawSimpleTexture()
 	glActiveTexture(GL_TEXTURE5);
 	glBindTexture(GL_TEXTURE_2D, m_TextureID5);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_P);
+	glViewport(0, m_WindowSizeY / 2, m_WindowSizeX / 2, m_WindowSizeY / 2);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_F);
+	glViewport(m_WindowSizeX / 2, m_WindowSizeY / 2, m_WindowSizeX / 2, m_WindowSizeY / 2);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture_G);
+	glViewport(0, 0, m_WindowSizeX / 2, m_WindowSizeY / 2);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	gTexIndex++;

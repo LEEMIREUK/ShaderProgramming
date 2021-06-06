@@ -86,4 +86,16 @@ private:
 	GLuint m_FBO_0 = 0;
 	GLuint m_FBOTexture_0 = 0;
 	GLuint m_FBODepth_0 = 0;
+
+	GLuint m_FBO_P = 0;
+	GLuint m_FBOTexture_P = 0;
+	GLuint m_FBODepth_P = 0;
+
+	GLuint m_FBO_F = 0;
+	GLuint m_FBOTexture_F = 0;
+	GLuint m_FBODepth_F = 0;
+
+	GLuint m_FBO_G = 0;
+	GLuint m_FBOTexture_G = 0;
+	GLuint m_FBODepth_G = 0;
 };
